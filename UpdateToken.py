@@ -5,6 +5,9 @@ import os
 from base64 import b64encode
 from nacl import encoding, public
 
+if sys.getdefaultencoding() != 'utf-8':
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 gh_token=os.getenv('GH_TOKEN')
 gh_repo=os.getenv('GH_REPO')
 #账号信息生成
