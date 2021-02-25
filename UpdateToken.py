@@ -81,7 +81,7 @@ def getmstoken():
         else:
             if retry_ == 3:
                 print('        微软密钥获取失败'+'\n'+'请检查secret里 CLIENT_ID , CLIENT_SECRET , MS_TOKEN ,重定向url 格式与内容是否正确，然后重新设置')
-                print('错误信息：\n'+json.loads(html.text))
+                print('错误信息：\n'+str(json.loads(html.text)))
     jsontxt = json.loads(html.text)
     refresh_token = jsontxt['refresh_token']
     return refresh_token
