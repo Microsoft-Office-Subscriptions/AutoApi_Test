@@ -3,10 +3,6 @@ import os
 import requests as req
 import json,sys,time,random
 
-
-if sys.getdefaultencoding() != 'utf-8':
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
 if os.getenv('ACCOUNT')== '' or os.getenv('OTHER_CONFIG') == '':
     print("<<<<<<<<<<<<<配置初始化中>>>>>>>>>>>>>")
     sys.exit()   
@@ -87,16 +83,17 @@ def getmstoken():
          }
     for retry_ in range(4):
         html = req.post('https://login.microsoftonline.com/common/oauth2/v2.0/token',data=data,headers=headers)
+        jsontxt = json.loads(html.text)
         if html.status_code < 300:
             print(r'        微软密钥获取成功')
             break
         else:
             if retry_ == 3:
                 print(r'        微软密钥获取失败\n'+'请检查secret里 CLIENT_ID , CLIENT_SECRET , MS_TOKEN ,重定向url 格式与内容是否正确，然后重新设置')
-                print('错误信息：\n'+html.text)
+                error_description=jsontxt['error_description'].split('\r\n')[0]
+                print('错误信息：\n        error: '+jsontxt['error']+'\n        error_description: '+error_description+'\n        error_codes: '+jsontxt['error_codes'])
                 if other_config['tg_bot'] != []:
                     sendTgBot('AutoApi简报：'+'\n'+r'账号 '+str(appnum+1)+' token获取失败，运行中断')
-    jsontxt = json.loads(html.text)
     return jsontxt['access_token']
     
 #延时
