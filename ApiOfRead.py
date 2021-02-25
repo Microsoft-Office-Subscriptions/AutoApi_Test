@@ -3,6 +3,9 @@ import os
 import requests as req
 import json,sys,time,random
 
+if sys.getdefaultencoding() != 'utf-8':
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 if os.getenv('ACCOUNT')== '' or os.getenv('OTHER_CONFIG') == '':
     print("<<<<<<<<<<<<<配置初始化中>>>>>>>>>>>>>")
     sys.exit()   
