@@ -69,7 +69,7 @@ api_list = [
            ]
 
 #微软refresh_token获取
-def getmstoken(appnum):
+def getmstoken():
     #try:except?
     headers={
             'Content-Type':'application/x-www-form-urlencoded'
@@ -84,11 +84,11 @@ def getmstoken(appnum):
     for retry_ in range(4):
         html = req.post('https://login.microsoftonline.com/common/oauth2/v2.0/token',data=data,headers=headers)
         if html.status_code < 300:
-            print(r'账号/应用 '+str(appnum+1)+' 的微软密钥获取成功')
+            print(r'        微软密钥获取成功')
             break
         else:
             if retry_ == 3:
-                print(r'账号/应用 '+str(appnum+1)+' 的微软密钥获取失败\n'+'请检查secret里 CLIENT_ID , CLIENT_SECRET , MS_TOKEN 格式与内容是否正确，然后重新设置')
+                print(r'        微软密钥获取失败\n'+'请检查secret里 CLIENT_ID , CLIENT_SECRET , MS_TOKEN ,重定向url 格式与内容是否正确，然后重新设置')
                 print('错误信息：\n'+json.loads(html.text))
                 if other_config['tg_bot'] != []:
                     sendTgBot('AutoApi简报：'+'\n'+r'账号 '+str(appnum+1)+' token获取失败，运行中断')
@@ -141,10 +141,11 @@ def sendTgBot(content):
 
 #一次性获取access_token，降低获取率
 for a in range(0, app_count):
+    print(r'账号/应用 '+str(a+1)+' : '+account['client_id'][a][:4]+r'*****'+account['client_id'][a][-4:])
     client_id=account['client_id'][a]
     client_secret=account['client_secret'][a]
     ms_token=account['ms_token'][a]
-    access_token_list[a]=getmstoken(a)
+    access_token_list[a]=getmstoken()
 
 #随机api序列
 fixed_api=[0,1,5,6,20,21]

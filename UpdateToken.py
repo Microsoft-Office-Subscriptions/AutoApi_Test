@@ -60,7 +60,7 @@ gh_url=r'https://api.github.com/repos/'+gh_repo+r'/actions/secrets/'
 key_id='wangziyingwen'
 print('<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>')
 #微软refresh_token获取
-def getmstoken(appnum):
+def getmstoken():
     #try:except?
     ms_headers={
                'Content-Type':'application/x-www-form-urlencoded'
@@ -76,11 +76,11 @@ def getmstoken(appnum):
         html = req.post('https://login.microsoftonline.com/common/oauth2/v2.0/token',data=data,headers=ms_headers)
         #json.dumps失败
         if html.status_code < 300:
-            print(r'账号/应用 '+str(appnum+1)+' 的微软密钥获取成功')
+            print('        微软密钥获取成功')
             break
         else:
             if retry_ == 3:
-                print(r'账号/应用 '+str(appnum+1)+' 的微软密钥获取失败'+'\n'+'请检查secret里 CLIENT_ID , CLIENT_SECRET , MS_TOKEN ,重定向url格式与内容是否正确，然后重新设置')
+                print('        微软密钥获取失败'+'\n'+'请检查secret里 CLIENT_ID , CLIENT_SECRET , MS_TOKEN ,重定向url 格式与内容是否正确，然后重新设置')
                 print('错误信息：\n'+json.loads(html.text))
     jsontxt = json.loads(html.text)
     refresh_token = jsontxt['refresh_token']
@@ -137,11 +137,13 @@ def deletesecret(url_name):
  
 #调用 
 gh_public_key=getpublickey('public-key')
+
 for a in range(0,len(account['client_id'])):
+    print(r'账号/应用 '+str(a+1)+' : '+account['client_id'][a][:4]+r'*****'+account['client_id'][a][-4:])
     client_id=account['client_id'][a]
     client_secret=account['client_secret'][a]
     ms_token=account['ms_token'][a]
-    account['ms_token'][a]=getmstoken(a)
+    account['ms_token'][a]=getmstoken()
 setsecret('ACCOUNT',createsecret(json.dumps(account),gh_public_key))
 if os.getenv('EMAIL') != '' or os.getenv('TG_BOT') != '':
     setsecret('OTHER_CONFIG',createsecret(json.dumps(other_config),gh_public_key))
