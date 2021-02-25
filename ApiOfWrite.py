@@ -32,7 +32,7 @@ log_list=['']*app_count
 # app_delay: 是否开启账号之间的延时，默认0关闭
 ########################################
 config = {
-         'allstart': 0,
+         'allstart': 1,
          'rounds': 1,
          'rounds_delay': [0,0,5],
          'api_delay': [0,0,5],
@@ -60,6 +60,7 @@ def getmstoken(appnum):
         else:
             if retry_ == 3:
                 print(r'账号/应用 '+str(appnum)+' 的微软密钥获取失败\n'+'请检查secret里 CLIENT_ID , CLIENT_SECRET , MS_TOKEN 格式与内容是否正确，然后重新设置')
+                print('错误信息：\n'+json.loads(html.text))
                 if other_config['tg_bot'] != ['','']:
                     sendTgBot('AutoApi简报：'+'\n'+r'账号 '+str(appnum+1)+' token获取失败，运行中断')    
     jsontxt = json.loads(html.text)       
@@ -278,7 +279,7 @@ weather=req.get(r'http://wttr.in/'+city+r'?format=4&?m',headers=headers).text
 for a in range(0, app_count):
     print('账号 '+str(a+1))
     print('发送邮件 ( 邮箱单独运行，每次运行只发送一次，防止封号 )')
-    if other_config['email'][0] != '':
+    if other_config['email'] != []:
         sendEmail(a,'weather',weather)
     else:
         print("尚未配置邮箱")

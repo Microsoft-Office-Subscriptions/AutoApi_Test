@@ -49,10 +49,13 @@ if os.getenv('TG_BOT') != '' and os.getenv('TG_BOT') != ' ':
     other_config['tg_bot']=[]
     for i in range(2):    
         other_config['tg_bot'].append(os.getenv('TG_BOT').split(',')[i])
-#删除TG推送
+#删除TG，邮箱推送
 if os.getenv('TG_BOT') == ' ':
     other_config['tg_bot']=[]
     print('删除TG推送')
+if os.getenv('EMAIL') == ' ':
+    other_config['email']=[]
+    print('删除email设置')
 gh_url=r'https://api.github.com/repos/'+gh_repo+r'/actions/secrets/'
 key_id='wangziyingwen'
 print('<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>')
@@ -77,7 +80,8 @@ def getmstoken(appnum):
             break
         else:
             if retry_ == 3:
-                print(r'账号/应用 '+str(appnum+1)+' 的微软密钥获取失败'+'\n'+'请检查secret里 account_ID , account_SECRET , MS_TOKEN 格式与内容是否正确，然后重新设置')
+                print(r'账号/应用 '+str(appnum+1)+' 的微软密钥获取失败'+'\n'+'请检查secret里 CLIENT_ID , CLIENT_SECRET , MS_TOKEN ,重定向url格式与内容是否正确，然后重新设置')
+                print('错误信息：\n'+json.loads(html.text))
     jsontxt = json.loads(html.text)
     refresh_token = jsontxt['refresh_token']
     return refresh_token

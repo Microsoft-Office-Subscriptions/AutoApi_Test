@@ -89,6 +89,7 @@ def getmstoken(appnum):
         else:
             if retry_ == 3:
                 print(r'账号/应用 '+str(appnum+1)+' 的微软密钥获取失败\n'+'请检查secret里 CLIENT_ID , CLIENT_SECRET , MS_TOKEN 格式与内容是否正确，然后重新设置')
+                print('错误信息：\n'+json.loads(html.text))
                 if other_config['tg_bot'] != []:
                     sendTgBot('AutoApi简报：'+'\n'+r'账号 '+str(appnum+1)+' token获取失败，运行中断')
     jsontxt = json.loads(html.text)
